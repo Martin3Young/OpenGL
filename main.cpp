@@ -238,14 +238,14 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS)
     {
         transYValue -= 0.01f;
-        if(transYValue<=0.0f)
-            transYValue = 0.0f;
+        if(transYValue<=-1.0f)
+            transYValue = -1.0f;
     }
     if (glfwGetKey(window,GLFW_KEY_LEFT) == GLFW_PRESS)
     {
         transXValue -= 0.01f;
-        if(transXValue<=0.0f)
-            transXValue = 0.0f;
+        if(transXValue<=-1.0f)
+            transXValue = -1.0f;
     }
     if (glfwGetKey(window,GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
