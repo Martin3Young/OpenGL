@@ -11,6 +11,7 @@ set(GLAD_H /usr/local/include/glad)
 set(KH_H /usr/local/include/KHR)
 #包含上述头文件所在目录
 include_directories(${GLEW_H} ${GLFW_H} ${GLAD_H} ${KH_H})
+include_directories(${PROJECT_SOURCE_DIR}/thirdparty/glm)
 
 #设置OpenGL库所在位置，并链接
 set(GLEW_LINK /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib)

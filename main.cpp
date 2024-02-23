@@ -4,6 +4,9 @@
 #include "src/shader_s.h"
 #include <cmath>
 #include "src/stb_image.h"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -14,6 +17,8 @@ const unsigned int SCR_HEIGHT = 600;
 
 // stores how much we're seeing of either texture
 float mixValue = 0.2f;
+float transXValue = 0.0f;
+float transYValue = 0.0f;
 
 int main()
 {
@@ -98,7 +103,7 @@ int main()
     glGenTextures(1, &texture1);
     glBindTexture(GL_TEXTURE_2D, texture1);
     // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -123,7 +128,7 @@ int main()
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
     // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -170,11 +175,20 @@ int main()
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
 
-        // set the texture mix value in the shader
+
         ourShader.setFloat("mixValue", mixValue);
 
-        // render container
+        // create transformations
+        glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        transform = glm::translate(transform, glm::vec3(transXValue, transYValue, 1.0f));
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // get matrix's uniform location and set matrix
         ourShader.use();
+        unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+        // render container
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -203,17 +217,41 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
         mixValue += 0.01f; // change this value accordingly (might be too slow or too fast based on system hardware)
         if(mixValue >= 1.0f)
             mixValue = 1.0f;
     }
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
         mixValue -= 0.01f; // change this value accordingly (might be too slow or too fast based on system hardware)
         if (mixValue <= 0.0f)
             mixValue = 0.0f;
+    }
+    if (glfwGetKey(window,GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        transYValue += 0.01f;
+        if(transYValue>=1.0f)
+            transYValue = 1.0f;
+    }
+    if (glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        transYValue -= 0.01f;
+        if(transYValue<=0.0f)
+            transYValue = 0.0f;
+    }
+    if (glfwGetKey(window,GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        transXValue -= 0.01f;
+        if(transXValue<=0.0f)
+            transXValue = 0.0f;
+    }
+    if (glfwGetKey(window,GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        transXValue += 0.01f;
+        if(transXValue>=1.0f)
+            transXValue = 1.0f;
     }
 }
 
