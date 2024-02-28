@@ -22,7 +22,7 @@ link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK})
 
 add_executable(opengl
         main.cpp
-        src/glad.c src/shader_s.h src/stb_image.h src/stb_image.cpp)
+        src/glad.c src/shader_s.h src/stb_image.h src/stb_image.cpp camera_class.cpp camera.h)
 
 if (APPLE)
     target_link_libraries(opengl "-framework OpenGL")
