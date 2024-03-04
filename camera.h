@@ -83,8 +83,6 @@ public:
             Position -= Right * velocity;
         if (direction == RIGHT)
             Position += Right * velocity;
-        //  限制只在X-Z平面运动
-        Position.y = 0.0f;
     }
 
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
