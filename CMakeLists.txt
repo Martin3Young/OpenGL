@@ -9,7 +9,7 @@ set(GLFW_H /usr/local/Cellar/glfw/3.3.9/include/GLFW)
 set(GLAD_H /usr/local/include/)
 set(GLAD_H /usr/local/include/glad)
 set(KH_H /usr/local/include/KHR)
-set(ASSIMP_H  /usr/local/Cellar/assimp/5.3.1/include/assimp)
+set(ASSIMP_H  /usr/local/Cellar/assimp/5.3.1/include)
 #包含上述头文件所在目录
 include_directories(${GLEW_H} ${GLFW_H} ${GLAD_H} ${KH_H} ${ASSIMP_H})
 include_directories(${PROJECT_SOURCE_DIR}/thirdparty/glm)
@@ -24,7 +24,7 @@ link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${ASSIMP_LINK})
 
 add_executable(opengl
         main.cpp
-        src/glad.c src/shader_s.h src/stb_image.h src/stb_image.cpp camera_class.cpp camera.h basic_lighting_specular.cpp)
+        src/glad.c src/shader_s.h src/stb_image.h src/stb_image.cpp camera_class.cpp camera.h basic_lighting_specular.cpp mesh.h model_loading.cpp model.h)
 
 if (APPLE)
     target_link_libraries(opengl "-framework OpenGL")
